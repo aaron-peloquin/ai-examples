@@ -3,7 +3,7 @@ from transformers import pipeline
 
 # Note: Not working
 
-model_path = ".\models\mpt-7b-instruct"
+model_path = "..\ai_models\mpt-7b-instruct"
 base_model = AutoModelForCausalLM.from_pretrained(
     pretrained_model_name_or_path=model_path,
     trust_remote_code=True,
