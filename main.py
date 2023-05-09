@@ -19,7 +19,7 @@ conversation = ConversationChain(
     memory=window_memory,
 )
 
-conversation.prompt.template = '''The following is a friendly conversation between a human and an AI. The AI is talkative and provides lots of specific details from its context.
+conversation.prompt.template = '''You are an AI Assistant chatbot having a friendly conversation with a Human about Dungeons and Dragons.
 
 If the AI does not know the answer to a question, it truthfully says it does not know.
 
@@ -28,7 +28,7 @@ Current conversation:
 ----
 
 Human: {input}
-(Additional Information: {context})
+
 AI:'''
 
 # AI cannot roll dice on its own and should not make up random numbers, instead AI will use the "DiceRoller" Action to roll dice.
@@ -41,39 +41,59 @@ agent = initialize_agent(
     verbose=True,
 )
 
-dndQuestion = "Please roll 3d6 to determine my Charisma ability score"
-print(Fore.BLUE, f"Humanoid: {dndQuestion}", Style.RESET_ALL)
-agent_reply = agent.run(dndQuestion)
-print(Fore.LIGHTMAGENTA_EX, f"D&D Bot: {agent_reply}")
+from langchain.chains.base import Chain
 
-dndQuestion = "(In Dungeons and Dragons) What age are Halflings considered mature?"
-print(Fore.BLUE, f"Humanoid: {dndQuestion}", Style.RESET_ALL)
-agent_reply = agent.run(dndQuestion)
-print(Fore.LIGHTMAGENTA_EX, f"D&D Bot: {agent_reply}")
+from typing import Dict, List
 
-# full_chain = SimpleSequentialChain(
-#     chains=[agent, conversation],
-#     input_key="context",
-#     output_key="context",
-#     verbose=True,
-# )
+class ConcatenateChain(Chain):
+    chain_1: Chain
+    chain_2: Chain
 
-# print(Fore.RED, '==== STARTING ====')
-# print(Style.RESET_ALL)
-# starter_prompt = "(In Dungeons and Dragons) What age are Halflings considered mature?"
-# print(f"== starter_prompt ({starter_prompt}) ==")
-# print(full_chain.run(starter_prompt))
+    @property
+    def input_keys(self) -> List[str]:
+        # Union of the input keys of the two chains.
+        all_input_vars = set(self.chain_1.input_keys)
+        return list(all_input_vars)
 
-# while True:
-#     print(Fore.CYAN)
-#     human_input = input("Human:")
-#     start_time = time.time()
-#     print(Style.RESET_ALL)
+    @property
+    def output_keys(self) -> List[str]:
+        return ['text']
+
+    def _call(self, inputs: Dict[str, str]) -> Dict[str, str]:
+        agent_output = self.chain_1.run(inputs)
+        print('=agent_output=', agent_output)
+        print('=inputs1=', inputs)
+        inputs['input'] += f"""
+
+(Context: {agent_output})"""
+        print('=inputs2=', inputs)
+        conversation_output = self.chain_2.run(inputs)
+        print('=conversation_output=', conversation_output)
+        return {"text": conversation_output}
+full_chain = ConcatenateChain(chain_1=agent, chain_2=conversation)
+
+# dndQuestion = "Please roll 3d6 to determine my Charisma ability score"
+# print(Fore.BLUE, f"Humanoid: {dndQuestion}", Style.RESET_ALL)
+# agent_reply = agent.run(dndQuestion)
+# print(Fore.LIGHTMAGENTA_EX, f"D&D Bot: {agent_reply}")
+
+# dndQuestion = "(In Dungeons and Dragons) What age are Halflings considered mature?"
+# print(Fore.BLUE, f"Humanoid: {dndQuestion}", Style.RESET_ALL)
+# agent_reply = agent.run(dndQuestion)
+# print(Fore.LIGHTMAGENTA_EX, f"D&D Bot: {agent_reply}")
+
+print(Fore.RED, '====', Style.RESET_ALL, ' STARTING ', Fore.RED, '====')
+
+while True:
+    print(Fore.CYAN)
+    human_input = input("Human:")
+    start_time = time.time()
+    print(Style.RESET_ALL)
     
-#     # ai_chat_reply = conversation.run(input=human_input)
-#     # ai_agent_reply = agent.run(human_input)
-#     ai_chat_agent_reply = full_chain.run(human_input)
+    # ai_chat_reply = conversation.run(input=human_input)
+    # ai_agent_reply = agent.run(human_input)
+    ai_chat_agent_reply = full_chain.run(human_input)
 
-#     print(Fore.LIGHTGREEN_EX, ai_chat_agent_reply, Style.RESET_ALL)
+    print(Fore.LIGHTMAGENTA_EX, ai_chat_agent_reply, Style.RESET_ALL)
     
-#     print(f"== {time.time() - start_time} ==")
+    print(f"== {time.time() - start_time} ==")
