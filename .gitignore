@@ -1,6 +1,9 @@
 # App-specific
 data/*
 !data/.gitkeep
+
+.chromaDB/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
