@@ -1,7 +1,4 @@
 # App-specific
-data/*
-!data/.gitkeep
-
 .chromaDB/*
 
 # Byte-compiled / optimized / DLL files
