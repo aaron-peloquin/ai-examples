@@ -8,7 +8,7 @@ from langchain.tools.base import BaseTool
 from langchain.vectorstores import Chroma
 from langchain.embeddings import HuggingFaceEmbeddings
 
-class srdReader(BaseTool):
+class dndSRD(BaseTool):
     """Tool that adds the capability to search D&D 5E SRD."""
 
     name = "DNDSRD"
@@ -46,5 +46,5 @@ class srdReader(BaseTool):
         query: str,
         run_manager: Optional[AsyncCallbackManagerForToolRun] = None,
     ) -> str:
-        """Use the Wikipedia tool asynchronously."""
-        raise NotImplementedError("WikipediaQueryRun does not support async")
+        """Use the DNDSRD tool asynchronously."""
+        raise NotImplementedError("DNDSRD does not support async")

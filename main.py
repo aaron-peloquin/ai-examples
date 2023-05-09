@@ -8,7 +8,7 @@ from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
 from modules.llm_vicuna7b import llm
 from tools.DiceRoller import DiceRoller
-from tools.srdReader import srdReader
+from tools.dndSRD import dndSRD
 
 # Set the memory to go back 4 turns
 window_memory = ConversationBufferWindowMemory(k=4)
@@ -35,7 +35,7 @@ AI:'''
 # When AI is unsure of the content and rules of Dungeons and Dragons (D&D), AI will use the "DNDSRD" Action to retrieve excerpts from the D&D rules book.
 
 agent = initialize_agent(
-    tools=[srdReader(), DiceRoller()],
+    tools=[dndSRD(), DiceRoller()],
     llm = llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     verbose=True,

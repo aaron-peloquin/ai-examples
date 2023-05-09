@@ -33,16 +33,13 @@ class DiceRoller(BaseTool):
             if match:
                 diceString = f"1{match.group(0)}"
             else:
-                return f"Invalid Agent Input syntax ({query}), try again with syntax like `#d#` where # is a number"
-
-        print(f"= diceString is {diceString} =")
+                return f"Invalid Agent Input syntax ({query}), try again with Agent Input syntax formatted like `1d20` but using your numbers"
 
         num_dice, sides = diceString.lower().split("d")
         num_dice = int(num_dice)
         sides = int(sides)
         print(f"= parsed as {num_dice} D {sides}= ")
         outcome = self.roll_dice(num_dice, sides)
-        print(f"= rolled {outcome}")
         return f"Rolled {diceString}, total result: {outcome}"
 
     def roll_dice(self, num_dice, sides):
@@ -54,7 +51,6 @@ class DiceRoller(BaseTool):
         for _ in range(num_dice):
             roll = random.randint(1, sides)
             roll_results += roll
-            print(f"= agent rolled 1d{sides}... got {roll}, totaling {roll_results} so far =")
         return roll_results
 
     async def _arun(
