@@ -3,7 +3,7 @@ from langchain.llms import HuggingFacePipeline
 from transformers import pipeline
 import torch
 
-model_path = ".\..\\ai_models\\vicuna-7B-1.1-HF"
+model_path = ".\..\\ai-models\\vicuna-7B-1.1-HF"
 tokenizer = LlamaTokenizer.from_pretrained(model_path)
 
 base_model = LlamaForCausalLM.from_pretrained(
