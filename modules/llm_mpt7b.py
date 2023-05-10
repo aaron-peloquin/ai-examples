@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from langchain.llms import HuggingFacePipeline
 import torch
 
-model_path = "..\ai-models\mpt-7b-instruct"
+model_path = "..\\ai-models\mpt-7b-instruct"
 base_model = AutoModelForCausalLM.from_pretrained(
     pretrained_model_name_or_path=model_path,
     trust_remote_code=True,
