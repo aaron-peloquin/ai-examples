@@ -2,11 +2,12 @@ import time
 from colorama import Fore, Style
 
 from langchain.agents import initialize_agent, AgentType
-from langchain.chains import SimpleSequentialChain
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
+from modules.ConcatenateChain import ConcatenateChain
 from modules.llm_vicuna7b import llm
+
 from tools.DiceRoller import DiceRoller
 from tools.dndSRD import dndSRD
 
@@ -18,21 +19,15 @@ conversation = ConversationChain(
     verbose=True, 
     memory=window_memory,
 )
+conversation.prompt.template = '''AI Assistant chatbot having a friendly conversation with a Human about Dungeons and Dragons.
 
-conversation.prompt.template = '''You are an AI Assistant chatbot having a friendly conversation with a Human about Dungeons and Dragons.
-
-If the AI does not know the answer to a question, it truthfully says it does not know.
+If the Assistant does not know the answer to a question, it truthfully says it does not know.
 
 Current conversation:
 {history}
 ----
-
 Human: {input}
-
-AI:'''
-
-# AI cannot roll dice on its own and should not make up random numbers, instead AI will use the "DiceRoller" Action to roll dice.
-# When AI is unsure of the content and rules of Dungeons and Dragons (D&D), AI will use the "DNDSRD" Action to retrieve excerpts from the D&D rules book.
+Assistant: '''
 
 agent = initialize_agent(
     tools=[dndSRD(), DiceRoller()],
@@ -41,36 +36,7 @@ agent = initialize_agent(
     verbose=True,
 )
 
-from langchain.chains.base import Chain
-
-from typing import Dict, List
-
-class ConcatenateChain(Chain):
-    chain_1: Chain
-    chain_2: Chain
-
-    @property
-    def input_keys(self) -> List[str]:
-        # Union of the input keys of the two chains.
-        all_input_vars = set(self.chain_1.input_keys)
-        return list(all_input_vars)
-
-    @property
-    def output_keys(self) -> List[str]:
-        return ['text']
-
-    def _call(self, inputs: Dict[str, str]) -> Dict[str, str]:
-        agent_output = self.chain_1.run(inputs)
-        print('=agent_output=', agent_output)
-        print('=inputs1=', inputs)
-        inputs['input'] += f"""
-
-(Context: {agent_output})"""
-        print('=inputs2=', inputs)
-        conversation_output = self.chain_2.run(inputs)
-        print('=conversation_output=', conversation_output)
-        return {"text": conversation_output}
-full_chain = ConcatenateChain(chain_1=agent, chain_2=conversation)
+full_chain = ConcatenateChain(agent=agent, conversation=conversation)
 
 # dndQuestion = "Please roll 3d6 to determine my Charisma ability score"
 # print(Fore.BLUE, f"Humanoid: {dndQuestion}", Style.RESET_ALL)
