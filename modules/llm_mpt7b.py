@@ -1,17 +1,13 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM
-from transformers import pipeline
-
-# Note: Not working
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+from langchain.llms import HuggingFacePipeline
+import torch
 
 model_path = "..\ai-models\mpt-7b-instruct"
 base_model = AutoModelForCausalLM.from_pretrained(
     pretrained_model_name_or_path=model_path,
     trust_remote_code=True,
-    local_files_only=True,
-    # load_in_8bit=True,
-    # device=0,
 )
-tokenizer = AutoTokenizer.from_pretrained(model_path) 
+tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neox-20b")
 
 pipe = pipeline(
     "text-generation",
