@@ -112,7 +112,7 @@ input_ids = tokenizer.encode(str(input_string), return_tensors='pt', add_special
 input_ids = input_ids[:, -1848:]
 input_ids = input_ids.cuda()
 print("==my input_ids==",input_ids)
-input_kwargs = {
+kwargs = {
    "max_new_tokens":200,
    "do_sample":True,
    "temperature":0.7,
@@ -127,10 +127,10 @@ input_kwargs = {
    "penalty_alpha":0,
    "length_penalty":1,
    "early_stopping":False,
-    "inputs": [input_ids],
+    "inputs": input_ids,
 }
-
-reply = base_model.generate(input_kwargs)
+print("==COMP==", kwargs)
+reply = base_model.generate(**kwargs)
 print(reply)
 
 print('== base_model & tokenizer ==')
