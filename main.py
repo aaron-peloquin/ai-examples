@@ -6,10 +6,21 @@ from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
 from modules.ConcatenateChain import ConcatenateChain
-from modules.llm_vicuna7b import llm
+from modules.llm_quantized import llm
 
 from tools.DiceRoller import DiceRoller
 from tools.dndSRD import dndSRD
+
+print('llm imported, start of script')
+
+agent = initialize_agent(
+    tools=[dndSRD(), DiceRoller()],
+    llm = llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True,
+)
+
+print('agent: augmented')
 
 # Set the memory to go back 4 turns
 window_memory = ConversationBufferWindowMemory(k=4)
@@ -28,13 +39,8 @@ Current conversation:
 ----
 Human: {input}
 Assistant: '''
+print('conversation: complete')
 
-agent = initialize_agent(
-    tools=[dndSRD(), DiceRoller()],
-    llm = llm,
-    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True,
-)
 
 full_chain = ConcatenateChain(agent=agent, conversation=conversation)
 
