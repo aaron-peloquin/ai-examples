@@ -88,7 +88,7 @@ def _load_quant(model, checkpoint, wbits, groupsize=-1, faster_kernel=False, exc
 # Custom code
 from langchain.llms import HuggingFacePipeline
 from transformers import AutoTokenizer, pipeline
-
+print('starting...')
 base_model = _load_quant(
     model="..\\ai-models\\vicuna-13b-GPTQ-4bit-128g",
     checkpoint="..\\ai-models\\vicuna-13b-GPTQ-4bit-128g\\vicuna-13b-4bit-128g.safetensors",
@@ -104,16 +104,54 @@ tokenizer = AutoTokenizer.from_pretrained(
     trust_remote_code=True,
 )
 
+input_string = """Assistant's name is Alicorn, a helpful chatbot engaging in a friendly conversation with Human.
+
+Human: Hello, what is your name and what type of being are you?
+Assistant: """
+input_ids = tokenizer.encode(str(input_string), return_tensors='pt', add_special_tokens=False)
+input_ids = input_ids[:, -1848:]
+input_ids = input_ids.cuda()
+print("==my input_ids==",input_ids)
+input_kwargs = {
+   "max_new_tokens":200,
+   "do_sample":True,
+   "temperature":0.7,
+   "top_p":0.5,
+   "typical_p":1,
+   "repetition_penalty":1.2,
+   "encoder_repetition_penalty":1,
+   "top_k":40,
+   "min_length":0,
+   "no_repeat_ngram_size":0,
+   "num_beams":1,
+   "penalty_alpha":0,
+   "length_penalty":1,
+   "early_stopping":False,
+    "inputs": [input_ids],
+}
+
+reply = base_model.generate(input_kwargs)
+print(reply)
+
+print('== base_model & tokenizer ==')
 pipe = pipeline(
     "text-generation",
     model=base_model,
     trust_remote_code=True,
-    torch_dtype=torch.float16,
+    # torch_dtype=torch.float16,
     tokenizer=tokenizer,
     max_length=1152,
-    temperature=0.34,
-    top_p=0.95,
+    temperature=0.7,
+    top_p=0.5,
+    typical_p=1,
+    max_new_tokens=200,
+    top_k=40,
     repetition_penalty=1.2,
+    encoder_repetition_penalty=1,
 )
+
+print('== pipeline()d ==')
+
+print(f'gen txt: {pipe("Hello, what is your name?")}')
 
 llm = HuggingFacePipeline(pipeline=pipe)
