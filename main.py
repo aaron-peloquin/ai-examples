@@ -6,7 +6,9 @@ from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
 from modules.ConcatenateChain import ConcatenateChain
-from modules.llm_vicuna7b import llm
+from modules.llm_makersuite import MakerSuite
+
+llm = MakerSuite(max_output_tokens=800)
 
 from tools.DiceRoller import DiceRoller
 from tools.dndSRD import dndSRD
@@ -15,8 +17,8 @@ from tools.dndSRD import dndSRD
 window_memory = ConversationBufferWindowMemory(k=4)
 
 conversation = ConversationChain(
-    llm=llm, 
-    verbose=True, 
+    llm=llm,
+    verbose=True,
     memory=window_memory,
 )
 conversation.prompt.template = '''AI Assistant chatbot having a friendly conversation with a Human about Dungeons and Dragons.
