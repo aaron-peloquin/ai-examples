@@ -6,17 +6,19 @@ from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
 from modules.ConcatenateChain import ConcatenateChain
-from modules.llm_vicuna7b import llm
+from modules.llm_makersuite import MakerSuite
+
+llm = MakerSuite()
 
 from tools.DiceRoller import DiceRoller
 from tools.dndSRD import dndSRD
 
 # Set the memory to go back 4 turns
-window_memory = ConversationBufferWindowMemory(k=4)
+window_memory = ConversationBufferWindowMemory(k=12)
 
 conversation = ConversationChain(
-    llm=llm, 
-    verbose=True, 
+    llm=llm,
+    verbose=False,
     memory=window_memory,
 )
 conversation.prompt.template = '''AI Assistant chatbot having a friendly conversation with a Human about Dungeons and Dragons.
@@ -38,16 +40,6 @@ agent = initialize_agent(
 
 full_chain = ConcatenateChain(agent=agent, conversation=conversation)
 
-# dndQuestion = "Please roll 3d6 to determine my Charisma ability score"
-# print(Fore.BLUE, f"Humanoid: {dndQuestion}", Style.RESET_ALL)
-# agent_reply = agent.run(dndQuestion)
-# print(Fore.LIGHTMAGENTA_EX, f"D&D Bot: {agent_reply}")
-
-# dndQuestion = "(In Dungeons and Dragons) What age are Halflings considered mature?"
-# print(Fore.BLUE, f"Humanoid: {dndQuestion}", Style.RESET_ALL)
-# agent_reply = agent.run(dndQuestion)
-# print(Fore.LIGHTMAGENTA_EX, f"D&D Bot: {agent_reply}")
-
 print(Fore.RED, '====', Style.RESET_ALL, ' STARTING ', Fore.RED, '====')
 
 while True:
@@ -56,8 +48,6 @@ while True:
     start_time = time.time()
     print(Style.RESET_ALL)
     
-    # ai_chat_reply = conversation.run(input=human_input)
-    # ai_agent_reply = agent.run(human_input)
     ai_chat_agent_reply = full_chain.run(human_input)
 
     print(Fore.LIGHTMAGENTA_EX, ai_chat_agent_reply, Style.RESET_ALL)

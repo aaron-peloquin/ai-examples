@@ -20,6 +20,6 @@ class ConcatenateChain(Chain):
         agent_output = self.agent.run(inputs)
         inputs['input'] += f"""
 
-(Context: {agent_output})"""
+(Helper: {agent_output})"""
         conversation_output = self.conversation.run(inputs)
         return {"text": conversation_output}

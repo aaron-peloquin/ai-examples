@@ -24,7 +24,7 @@ class DiceRoller(BaseTool):
     ) -> str:
         """Use the DiceRoller tool."""
         print("")
-        print(f"= DiceRoller tool query is `{query}`")
+        print(f"==== DiceRoller qry: `{query}`")
         match = re.search(r"\d+[Dd]\d+", query)
         if match:
             diceString = match.group(0)
@@ -38,8 +38,8 @@ class DiceRoller(BaseTool):
         num_dice, sides = diceString.lower().split("d")
         num_dice = int(num_dice)
         sides = int(sides)
-        print(f"= parsed as {num_dice} D {sides}= ")
         outcome = self.roll_dice(num_dice, sides)
+        print(f"= parsed as {diceString}, got {outcome}=")
         return f"Rolled {diceString}, total result: {outcome}"
 
     def roll_dice(self, num_dice, sides):

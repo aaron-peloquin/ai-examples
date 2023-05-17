@@ -16,6 +16,7 @@ class dndSRD(BaseTool):
     description = (
     "Used to retrieve information about the rules and content of Dungeons and Dragons. "
     "The Action Input should be a brief query for the in-context subject matter you want to learn about. "
+    "Retrieved information is deterministic, so the same Action Input will always yield the same output, not new information"
     # "For example, you can use an Action Input of \"Bard hit dice\" where Bard is the context and hit dice is the subject matter, this will retrieve an excerpt from the rules book on the Bard class's hit dice value"
     )
 
@@ -28,6 +29,8 @@ class dndSRD(BaseTool):
         self.db = chromaDb
 
     def _run(self, ruleBookQuery: str) -> str:
+        print("")
+        print(f"==== DNDSRD qry: `{ruleBookQuery}`")
         results = self.db.similarity_search(ruleBookQuery, k=6)
         output = f"""DND Search Results:"""
         seen = set()
