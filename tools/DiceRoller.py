@@ -24,7 +24,7 @@ class DiceRoller(BaseTool):
     ) -> str:
         """Use the DiceRoller tool."""
         print("")
-        print(f"= DiceRoller tool query is `{query}`")
+        print(f"= DiceRoller qry: `{query}`")
         match = re.search(r"\d+[Dd]\d+", query)
         if match:
             diceString = match.group(0)
