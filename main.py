@@ -9,16 +9,15 @@ from modules.ConcatenateChain import ConcatenateChain
 from modules.llm_makersuite import MakerSuite
 
 llm = MakerSuite()
-chat_llm = MakerSuite(generation_type="chat")
 
 from tools.DiceRoller import DiceRoller
 from tools.dndSRD import dndSRD
 
 # Set the memory to go back 4 turns
-window_memory = ConversationBufferWindowMemory(k=4)
+window_memory = ConversationBufferWindowMemory(k=12)
 
 conversation = ConversationChain(
-    llm=chat_llm,
+    llm=llm,
     verbose=True,
     memory=window_memory,
 )
