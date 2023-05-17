@@ -2,6 +2,7 @@ from typing import Any, List, Mapping, Optional
 from dotenv import dotenv_values
 from langchain.llms.base import LLM
 from langchain.callbacks.manager import CallbackManagerForLLMRun
+import re
 
 import google.generativeai as palm
 
@@ -26,7 +27,10 @@ class MakerSuite(LLM):
             prompt = prompt,
             max_output_tokens = self.max_output_tokens,
         )
-        return google_call.result
+        output_text = google_call.result
+        if(stop is not None):
+            output_text = self.truncate_string(output_text, stop)
+        return output_text
 
     @property
     def _identifying_params(self) -> Mapping[str, Any]:
@@ -34,3 +38,21 @@ class MakerSuite(LLM):
         return {
             "max_output_tokens": self.max_output_tokens,
         }
+
+    def truncate_string(self, string, stop_list):
+        """
+        Truncates a string as soon as it finds any of the items in the `stop_list`.
+
+        Args:
+            string: The string to truncate.
+            stop_list: A list of strings that should be used to truncate the string.
+
+        Returns:
+            The truncated string.
+        """
+
+        pattern = re.compile("|".join(stop_list))
+        match = pattern.search(string)
+        if match:
+            return string[:match.start()]
+        return string

@@ -29,7 +29,7 @@ class dndSRD(BaseTool):
 
     def _run(self, ruleBookQuery: str) -> str:
         print("")
-        print(f"= DNDSRD qry: `{ruleBookQuery}`")
+        print(f"==== DNDSRD qry: `{ruleBookQuery}`")
         results = self.db.similarity_search(ruleBookQuery, k=6)
         output = f"""DND Search Results:"""
         seen = set()
