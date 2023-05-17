@@ -8,7 +8,8 @@ from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from modules.ConcatenateChain import ConcatenateChain
 from modules.llm_makersuite import MakerSuite
 
-llm = MakerSuite(max_output_tokens=800)
+llm = MakerSuite()
+chat_llm = MakerSuite(generation_type="chat")
 
 from tools.DiceRoller import DiceRoller
 from tools.dndSRD import dndSRD
@@ -17,7 +18,7 @@ from tools.dndSRD import dndSRD
 window_memory = ConversationBufferWindowMemory(k=4)
 
 conversation = ConversationChain(
-    llm=llm,
+    llm=chat_llm,
     verbose=True,
     memory=window_memory,
 )
