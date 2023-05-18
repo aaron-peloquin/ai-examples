@@ -28,9 +28,12 @@ class MakerSuite(LLM):
             max_output_tokens = self.max_output_tokens,
         )
         output_text = google_call.result
-        if(stop is not None):
-            output_text = self.truncate_string(output_text, stop)
-        return output_text
+        print(f"stop, ({stop})")
+        if output_text is not None:
+            if len(stop) > 0:
+                output_text = self.truncate_string(output_text, stop)
+            return output_text
+        raise ValueError("Error generating text from API")
 
     @property
     def _identifying_params(self) -> Mapping[str, Any]:
@@ -39,7 +42,7 @@ class MakerSuite(LLM):
             "max_output_tokens": self.max_output_tokens,
         }
 
-    def truncate_string(self, string, stop_list):
+    def truncate_string(self, full_reply, stop_list):
         """
         Truncates a string as soon as it finds any of the items in the `stop_list`.
 
@@ -52,7 +55,7 @@ class MakerSuite(LLM):
         """
 
         pattern = re.compile("|".join(stop_list))
-        match = pattern.search(string)
+        match = pattern.search(full_reply)
         if match:
             return string[:match.start()]
         return string
