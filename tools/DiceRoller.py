@@ -6,13 +6,14 @@ from langchain.tools.base import BaseTool
 from langchain.callbacks.manager import AsyncCallbackManagerForToolRun, CallbackManagerForToolRun
 
 class DiceRoller(BaseTool):
-    """Tool that adds the capability to roll dice like 1d6+3."""
+    """Tool that adds the capability to roll dice like 1d6."""
 
     name = "DICEROLLER"
     description = (
         # "A tool who is an expert at rolling dice "
         "Used for when you need to roll dice to get a random number "
-        "The Action Input should be a single string in the style of tabletop gaming, examples: `1d20`, `3d6`, `2d4`, etc." # 2d4+2
+        "The Action Input should be a single string in the style of tabletop gaming, examples: `1d20`, `3d6`, `2d4`, etc. " # 2d4+2
+        "Does not perform math on dice rolls, so `1d20+3` is not acceptable input"
         # " Dice Roller does not know anything about characters or the world. Do not cite any skill names or ability scores as strings when using this tool. "
         # "Instead look up the number that represents that and send the actual value (number) to DiceRoller"
     )
