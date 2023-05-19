@@ -28,7 +28,6 @@ class MakerSuite(LLM):
             max_output_tokens = self.max_output_tokens,
         )
         output_text = google_call.result
-        print(f"stop, ({stop})")
         if output_text is not None:
             if stop is not None:
                 if len(stop) > 0:
