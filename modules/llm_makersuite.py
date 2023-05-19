@@ -30,8 +30,9 @@ class MakerSuite(LLM):
         output_text = google_call.result
         print(f"stop, ({stop})")
         if output_text is not None:
-            if len(stop) > 0:
-                output_text = self.truncate_string(output_text, stop)
+            if stop is not None:
+                if len(stop) > 0:
+                    output_text = self.truncate_string(output_text, stop)
             return output_text
         raise ValueError("Error generating text from API")
 
@@ -57,5 +58,5 @@ class MakerSuite(LLM):
         pattern = re.compile("|".join(stop_list))
         match = pattern.search(full_reply)
         if match:
-            return string[:match.start()]
-        return string
+            return full_reply[:match.start()]
+        return full_reply
