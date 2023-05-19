@@ -11,7 +11,7 @@ from modules.llm_makersuite import MakerSuite
 llm = MakerSuite()
 
 from tools.DiceRoller import DiceRoller
-# from tools.dndSRD import dndSRD
+from tools.dndSRD import dndSRD
 from tools.DND5E import DND5E
 
 # Set the memory to go back 4 turns
@@ -33,7 +33,7 @@ Human: {input}
 Assistant: '''
 
 agent = initialize_agent(
-    tools=[DND5E(), DiceRoller()],
+    tools=[DND5E(), DiceRoller(), dndSRD()],
     llm = llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     verbose=True,
