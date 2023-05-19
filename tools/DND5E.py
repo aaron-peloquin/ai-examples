@@ -11,7 +11,8 @@ class DND5E(BaseTool):
 
     name = "DND5E"
     description = (
-        "Used for when you need to get information from the D&D 5th Edition API. This is a modern restful API that replies in JSON format. "
+        "The preferred tool to use when you need to get information about the Dungeons and Dragons 5th Edition. "
+        "Replies in JSON format. "
         "The Action Input should be a single string in the format of `resource/resource_name`. "
         "Accepted 'resource' items are: ['ability-scores', 'alignments', 'backgrounds', 'classes', 'conditions', 'damage-types', 'equipment-categories', 'equipment', 'feats', 'features', 'languages', 'magic-items', 'magic-schools', 'monsters', 'proficiencies', 'races', 'rules', 'rule-sections', 'skills', 'spells', 'subclasses', 'subraces', 'traits', 'weapon-properties']. "
         "The 'resource_name' is an optional free text query. "
