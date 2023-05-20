@@ -7,10 +7,12 @@ anyio==3.6.2
 argilla==1.6.0
 async-timeout==4.0.2
 attrs==23.1.0
+auto-gptq==0.1.0
 backoff==2.2.1
 beautifulsoup4==4.12.2
 bitsandbytes @ git+https://github.com/Keith-Hon/bitsandbytes-windows.git@85ff11a7f04af73bc83cbe6ed0eb1a77ade0697b
 bs4==0.0.1
+cachetools==5.3.0
 certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==3.1.0
@@ -39,9 +41,16 @@ filelock==3.12.0
 fonttools==4.39.3
 frozenlist==1.3.3
 fsspec==2023.4.0
+google-ai-generativelanguage==0.2.0
+google-api-core==2.11.0
+google-auth==2.18.0
+google-generativeai==0.1.0rc3
+googleapis-common-protos==1.59.0
 gradio==3.28.1
 gradio_client==0.1.4
 greenlet==2.0.1
+grpcio==1.54.2
+grpcio-status==1.54.2
 h11==0.14.0
 hnswlib==0.7.0
 httpcore==0.16.3
@@ -55,7 +64,7 @@ Jinja2==3.1.2
 joblib==1.2.0
 jsonschema==4.17.3
 kiwisolver==1.4.4
-langchain==0.0.161
+langchain==0.0.174
 linkify-it-py==2.0.2
 llama-cpp-python==0.1.39
 loralib==0.1.1
@@ -93,12 +102,16 @@ peft==0.3.0
 Pillow==9.3.0
 playwright==1.33.0
 posthog==3.0.1
-protobuf==3.20.0
+proto-plus==1.22.2
+protobuf==4.23.0
 psutil==5.9.5
 pyarrow==12.0.0
+pyasn1==0.5.0
+pyasn1-modules==0.3.0
 pybind11==2.10.4
 pycparser==2.21
 pydantic==1.10.7
+pydash==7.0.3
 pydub==0.25.1
 pyee==9.0.4
 Pygments==2.15.1
@@ -118,6 +131,8 @@ requests==2.30.0
 responses==0.18.0
 rfc3986==1.5.0
 rich==13.0.1
+rouge==1.0.1
+rsa==4.9
 safetensors==0.3.1
 scikit-learn==1.2.2
 scipy==1.10.1

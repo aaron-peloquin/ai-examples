@@ -26,14 +26,12 @@ class MakerSuite(LLM):
             model = "models/text-bison-001",
             prompt = prompt,
             max_output_tokens = self.max_output_tokens,
+            stop_sequences=stop
         )
         output_text = google_call.result
-        if output_text is not None:
-            if stop is not None:
-                if len(stop) > 0:
-                    output_text = self.truncate_string(output_text, stop)
-            return output_text
-        raise ValueError("Error generating text from API")
+        if output_text is None:
+            raise ValueError("Error generating text from API")
+        return output_text
 
     @property
     def _identifying_params(self) -> Mapping[str, Any]:
