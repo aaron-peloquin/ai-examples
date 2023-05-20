@@ -7,6 +7,7 @@ from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
 from modules.chain_concatenate import ConcatenateChain
 from modules.llm_makersuite import MakerSuite
+from tools.EquationSolver import EquationSolver
 
 llm = MakerSuite()
 
@@ -33,7 +34,12 @@ Human: {input}
 Assistant: '''
 
 agent = initialize_agent(
-    tools=[DND5E(), DiceRoller(), dndSRD()],
+    tools=[
+        DND5E(),
+        DiceRoller(),
+        EquationSolver(),
+        dndSRD(),
+    ],
     llm = llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     verbose=True,
