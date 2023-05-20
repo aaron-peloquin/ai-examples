@@ -38,12 +38,22 @@ class DND5E(BaseTool):
             resource = match.group(0)
             resource_name = ""
 
+        common_mistakes = {
+            "weapons": "equipment",
+            "armor": "equipment",
+            "items": "equipment",
+        }
+        resource = common_mistakes.get(resource, resource).replace(" ", "-")
+
         valid_resource = any(res == resource for res in self.acceptable_resources)
         
         if valid_resource == False:
             plural_check = resource[len(resource)-1] != "s"
             if plural_check:
-                return self._run(f"{resource}s/{resource_name}")
+                new_query = f"{resource}s"
+                if resource_name:
+                    new_query += f"/{resource_name}"
+                return self._run(new_query)
             return f"Invalid Agent Input syntax ({query}), try again with Agent Input syntax formatted like `spell/acid arrow` but using your terms"
 
         url = f"https://www.dnd5eapi.co/api/{resource}"

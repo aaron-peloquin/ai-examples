@@ -1,18 +1,18 @@
 import time
-# from tools.DND5E import DND5E
+from tools.DND5E import DND5E
 # from tools.DiceRoller import DiceRoller
-from tools.EquationSolver import EquationSolver
+# from tools.EquationSolver import EquationSolver
 # from tools.dndSRD import dndSRD
 
 
 toolbelt = [
-    EquationSolver(),
+    # EquationSolver(),
     # DiceRoller(),
-    # DND5E(),
+    DND5E(),
     # dndSRD(),
 ]
 
-input_queries = ["(1+2)", "2*6", "4*2", "4  +6*2"]
+input_queries = ["armor/leather armor", "weapon/maul", "magic item/potion+of healing"]
 
 for tool in toolbelt:
     print(f"==== {tool.name} ====")
