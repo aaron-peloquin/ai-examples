@@ -5,7 +5,7 @@ from langchain.agents import initialize_agent, AgentType
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
-from modules.ConcatenateChain import ConcatenateChain
+from modules.chain_concatenate import ConcatenateChain
 from modules.llm_makersuite import MakerSuite
 
 llm = MakerSuite()
