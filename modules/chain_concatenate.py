@@ -17,7 +17,9 @@ class ConcatenateChain(Chain):
         return ['text']
 
     def _call(self, inputs: Dict[str, str]) -> Dict[str, str]:
-        agent_output = self.agent.run(inputs)
+        agent_inputs = inputs
+        agent_inputs['input'] += ". (Clearly summarize the information you gather from Agents)"
+        agent_output = self.agent.run(agent_inputs)
         inputs['input'] += f"""
 
 (Helper: {agent_output})"""
