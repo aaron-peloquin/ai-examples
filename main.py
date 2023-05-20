@@ -6,6 +6,7 @@ from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
 from modules.chain_concatenate import ConcatenateChain
+from modules.callback_custom import CustomCallbackHandler
 from modules.llm_makersuite import MakerSuite
 from tools.EquationSolver import EquationSolver
 
@@ -14,6 +15,8 @@ llm = MakerSuite()
 from tools.DiceRoller import DiceRoller
 from tools.dndSRD import dndSRD
 from tools.DND5E import DND5E
+
+handler = CustomCallbackHandler()
 
 # Set the memory to go back 4 turns
 window_memory = ConversationBufferWindowMemory(k=12)
@@ -49,7 +52,7 @@ agent = initialize_agent(
     verbose=True,
 )
 
-full_chain = ConcatenateChain(agent=agent, conversation=conversation)
+full_chain = ConcatenateChain(agent=agent, conversation=conversation, callbacks=[handler])
 
 print(Fore.RED, '====', Style.RESET_ALL, ' STARTING ', Fore.RED, '====')
 
@@ -58,9 +61,9 @@ while True:
     human_input = input("Human:")
     start_time = time.time()
     print(Style.RESET_ALL)
-    
+
     ai_chat_agent_reply = full_chain.run(human_input)
 
     print(Fore.LIGHTMAGENTA_EX, ai_chat_agent_reply, Style.RESET_ALL)
-    
+
     print(f"== {time.time() - start_time} ==")
