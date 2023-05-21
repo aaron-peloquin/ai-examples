@@ -37,4 +37,6 @@ chain_time = time.time()
 print(f"==chained== {chain_time - llm_time}")
 
 reply = lang_chained_chain_for_chaining.run(human_text="What is your most prized possession?")
-print(f"==reply== ({reply})")
+
+# The LLM named itself
+print(f"Pirate Captain Arrrrr: {reply}")
