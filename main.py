@@ -49,7 +49,7 @@ agent = initialize_agent(
     ],
     llm = llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True,
+    verbose=False,
 )
 
 full_chain = ConcatenateChain(agent=agent, conversation=conversation, callbacks=[handler])
