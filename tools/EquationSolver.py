@@ -41,10 +41,10 @@ class EquationSolver(BaseTool):
         Strips all non-numeric characters or mathematical symbols from a string.
 
         Args:
-            string: The string to strip.
+            equation: The equation string to strip.
 
         Returns:
-            The string with all non-numeric characters or mathematical symbols stripped.
+            The equation string with all non-numeric characters or mathematical symbols stripped.
         """
         equation_string = equation.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ")
         equation_tokens = equation_string.split()
