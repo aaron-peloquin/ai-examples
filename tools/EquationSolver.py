@@ -12,12 +12,9 @@ class EquationSolver(BaseTool):
 
     name = "EQUATIONSOLVER"
     description = (
-        # "A tool who is an expert at solving equations "
-        "Used for when you need to solve an equation to get a result "
-        "The Action Input should be a single string in the style of mathematics, examples: `2 + 2`, `3 * 4`, `2 - 1`, `2 / 1`, etc. " # 2d4+2
+        "Used for when you want to know the answer to an equation to get a result "
+        "The Action Input should be a single string in the style of mathematics, examples: `2 + 2`, `3 * 4`, `2 - 1`, `2 / 1`, etc. "
         "Does not perform math on variables, so `x + 3` is not acceptable input"
-        # " Equation Solver does not know anything about characters or the world. Do not cite any skill names or ability scores as strings when using this tool. "
-        # "Instead look up the number that represents that and send the actual value (number) to Equation Solver"
     )
 
     def _run(
@@ -30,15 +27,37 @@ class EquationSolver(BaseTool):
         print(f"==== EquationSolver qry: `{query}`")
 
         # Strip all characters that do not match the regular expression.
-        equation_string = query.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ")
+        prepared_equation = self.cleanup_equation(query)
+
+        solution = numexpr.evaluate(prepared_equation)
+        print(f"== Solution == ({prepared_equation}) = ({solution})")
+        return solution
+
+    def cleanup_equation(
+        self,
+        equation: str,
+    ):
+        """
+        Strips all non-numeric characters or mathematical symbols from a string.
+
+        Args:
+            string: The string to strip.
+
+        Returns:
+            The string with all non-numeric characters or mathematical symbols stripped.
+        """
+        equation_string = equation.replace("+", " + ").replace("-", " - ").replace("*", " * ").replace("/", " / ")
         equation_tokens = equation_string.split()
         equation_parsed = " ".join(equation_tokens)
 
+        # Create a regular expression that matches all non-numeric characters or mathematical symbols.
+        regex = re.compile(r'[^0-9\-+*/.]')
 
+        # Replace all matches with an empty string.
+        stripped_equation = regex.sub('', equation_parsed)
 
-        solution = numexpr.evaluate(equation_parsed)
-        print(f"== Solution == ({equation_parsed}) = ({solution})")
-        return solution
+        return stripped_equation
+
 
     async def _arun(
         self,
