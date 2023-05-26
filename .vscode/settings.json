@@ -3,6 +3,8 @@
         "dtype",
         "Halfling",
         "Halflings",
+        "LIGHTMAGENTA",
+        "makersuite",
         "pydash"
     ]
 }
