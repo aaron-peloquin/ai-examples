@@ -17,11 +17,15 @@ class ConcatenateChain(Chain):
         return ['text']
 
     def _call(self, inputs: Dict[str, str]) -> Dict[str, str]:
-        agent_inputs = inputs
-        agent_inputs['input'] += ". (Clearly summarize the information you gather from Agents)"
-        agent_output = self.agent.run(agent_inputs)
-        inputs['input'] += f"""
+        original_input = inputs['input']
+        inputs['input'] += ". (Clearly summarize the information you gather from Agents)"
+        agent_output = self.agent.run(inputs)
 
-(Helper: {agent_output})"""
-        conversation_output = self.conversation.run(inputs)
+        print(f"agent_output: ({agent_output})")
+        conversation_inputs = {}
+        conversation_inputs["human_input"] = original_input
+        conversation_inputs["tool_output"] = agent_output
+
+        conversation_output = self.conversation.run(conversation_inputs)
+        print(f"conversation_output: ({conversation_output})")
         return {"text": conversation_output}

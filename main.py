@@ -1,9 +1,9 @@
 import time
 from colorama import Fore, Style
 
+from langchain import LLMChain, PromptTemplate
 from langchain.agents import initialize_agent, AgentType
-from langchain.chains import ConversationChain
-from langchain.chains.conversation.memory import ConversationBufferWindowMemory
+from langchain.memory import ConversationBufferMemory
 
 from modules.chain_concatenate import ConcatenateChain
 from modules.callback_custom import CustomCallbackHandler
@@ -18,16 +18,7 @@ from tools.DND5E import DND5E
 
 handler = CustomCallbackHandler()
 
-# Set the memory to go back 4 turns
-window_memory = ConversationBufferWindowMemory(k=12)
-
-conversation = ConversationChain(
-    llm=llm,
-    verbose=False,
-    memory=window_memory,
-)
-
-conversation.prompt.template = '''AI Assistant chatbot having a friendly conversation with a Human about Dungeons and Dragons (D&D).
+template = '''AI Assistant chatbot having a friendly conversation with a Human about Dungeons and Dragons (D&D).
 Assistant will act as the storyteller for a D&D game.
 Helper will gather information, roll dice, and perform calculations instead for Assistant.
 Assistant's job is to be the storyteller, not check rules or perform calculations.
@@ -35,10 +26,24 @@ Assistant will trust that Helper did its job completely and convey that informat
 If the Assistant does not know the answer to a question, it will not make up information.
 
 Current conversation:
-{history}
+{chat_history}
 ----
-Human: {input}
+Human: {human_input}
+Helper: {tool_output}
 Assistant: '''
+
+prompt = PromptTemplate(
+    input_variables=["chat_history", "human_input", "tool_output"], 
+    template=template
+)
+print(f"prompt: ({prompt.input_variables})")
+memory = ConversationBufferMemory(memory_key="chat_history")
+
+conversation = LLMChain(
+    llm=llm,
+    memory=memory,
+    prompt=prompt,
+)
 
 agent = initialize_agent(
     tools=[
@@ -49,10 +54,14 @@ agent = initialize_agent(
     ],
     llm = llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=False,
+    verbose=True,
 )
 
-full_chain = ConcatenateChain(agent=agent, conversation=conversation, callbacks=[handler])
+full_chain = ConcatenateChain(
+    agent=agent,
+    conversation=conversation,
+    callbacks=[handler]
+)
 
 print(Fore.RED, '====', Style.RESET_ALL, ' STARTING ', Fore.RED, '====')
 
