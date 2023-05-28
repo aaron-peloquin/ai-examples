@@ -27,7 +27,7 @@ The Action Input should be a single command to view or manage the project's file
  * 
  * @param string $my_word text to be tested
  * @return bool false if not uppercase
- */` will set the description of that file in DocBlock format, this will appear later in `list` so other software engineers will know what your file does, please ensure you make one DocBlock for each the file's exported variables
+ */` will set the description of that file in DocBlock format, descriptions are shown in `list`. Ensure you make one DocBlock for each the file's exported variables
 - `run [filename.py]` will execute a single code script and return the terminal output to you.
 - `open [example.ts]` Will open the file and return its current contents to you.
 - `write [test.js] <<<export const test = ["foo", "bar"]
@@ -50,11 +50,12 @@ To simplify your work, we do not support modifying existing files, making direct
         fsCmd, fsFilename, fsExtra = self.parseCmd(query)
 
         if fsCmd == "list":
-            print("listing")
             files = []
+            file_number = 0
             for file in os.listdir(code_dir):
                 if file.endswith(".describe"):
                     continue
+                file_number += 1
                 description = "(No Description metadata set)"
                 try:
                     desc_file = f"{code_dir}{file}.describe"
@@ -64,8 +65,8 @@ To simplify your work, we do not support modifying existing files, making direct
                 except FileNotFoundError:
                     pass
                 size = os.path.getsize(os.path.join(code_dir, file))
-                files.append((file, size, description))
-            return "\n ".join([f"{file} ({size} Bytes): {description}" for file, size, description in files])
+                files.append((file, size, description, file_number))
+            return "\n ".join([f"[file #{file_number}] {file} ({size} Bytes): {description}" for file, size, description, file_number in files])
         # elif fsCmd == "make":
         #     try:
         #         open(f"{code_dir}{fsFilename}", "w")
@@ -75,7 +76,6 @@ To simplify your work, we do not support modifying existing files, making direct
         #         return f"failed to create file {fsFilename}"
 
         elif fsCmd == "describe":
-            print("describing")
             try:
                 with open(f"{code_dir}{fsFilename}.describe", "w") as f:
                     f.write(fsExtra)
@@ -84,19 +84,17 @@ To simplify your work, we do not support modifying existing files, making direct
                 return f"failed to set description for {fsFilename}"
 
         elif fsCmd == "run":
-            print("running?")
+            print("running? lets just not yet ok...")
             # os.system(f"node {fsFilename}")
         elif fsCmd == "open":
-            print(f"opening ({code_dir}{fsFilename})")
             try:
                 with open(f"{code_dir}{fsFilename}", "r") as f:
                     contents = f.read()
-                    return f"opened {fsFilename} contents: {contents}"
+                    return f"opened {fsFilename}, its contents are:\n\n{contents}"
             except:
                 return f"failed to open {fsFilename}"
 
         elif fsCmd == "write":
-            print("writing")
             try:
                 with open(f"{code_dir}{fsFilename}", "w") as f:
                     f.write(fsExtra)
@@ -112,18 +110,7 @@ To simplify your work, we do not support modifying existing files, making direct
         fsFilename = ""
         fsExtra = ""
 
-        # match = re.match(r'(describe|list|open|run|write)(?:[\s\S]*\[(.*?)\])?(.*?)$', query, flags=re.DOTALL)
-        # match = re.match(r'(?P<command>describe|list|open|run|write)(?:[\s\S][(?P<filename>.?)])?(?P<text>.*?)$', query, flags=re.DOTALL)
-        # match = re.match(r'(?P<command>describe|list|open|run|write)(?:[\s\S]\s[(?P<filename>.?)])?(?P<text>.*?)$', query, flags=re.DOTALL)
-        # match = re.match(r'(?P<command>describe|list|open|run|write)(?:[\s\S]\s[(?P<filename>[^]]+)])?(?P<text>.?)$', query, flags=re.DOTALL)
-        # match = re.match(r'(?P<command>describe|list|open|run|write)(?:[\s\S]\s((?P<filename>[^)]+)))?(?P<text>.?)$', query, flags=re.DOTALL)
-        # match = re.match(r'^(?P<command>[a-zA-Z]+)\s*(?:(?P<filename>[[a-zA-Z0-9._-]+]))?\s*(?P<text>.*)$', query, flags=re.DOTALL)
         match = re.match(r'^(?P<command>[a-zA-Z]+)\s*(?:(?P<filename>\[[a-zA-Z0-9._-]+\]))?\s*(?P<text>.*)$', query, flags=re.DOTALL)
-
-
-
-
-        # print(f"match====({match.groups()})")
 
         if match:
             fsCmd = match.group("command")
@@ -142,9 +129,9 @@ To simplify your work, we do not support modifying existing files, making direct
             fsFilename = fsFilename.strip()
             fsExtra = fsExtra.strip()
 
-        print(f"fsCmd:{fsCmd}")
-        print(f"fsFilename:{fsFilename}")
-        print(f"fsExtra:{fsExtra}")
+        # print(f"fsCmd:{fsCmd}")
+        # print(f"fsFilename:{fsFilename}")
+        # print(f"fsExtra:{fsExtra}")
 
         return fsCmd, fsFilename, fsExtra
 
