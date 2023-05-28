@@ -12,11 +12,11 @@ class FileManager(BaseTool):
 
     name = "FileManager"
     description = (
-"""Used for when examine the filesystem (working directory for this code project).
+"""Used to view and modify files within a code projects working directory.
 
-Always wrap filenames in square brackets `[example.txt]`
-
-Each file should be a complete script file. You are already inside of your working code directory
+Always wrap filenames in square brackets `[example.txt]`.
+Each file should be a complete script file.
+You have no control over making or entering other directories
 
 The Action Input should be a single command to view or manage the project's files:
 
