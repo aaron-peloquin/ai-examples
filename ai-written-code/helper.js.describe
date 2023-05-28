@@ -1,0 +1,4 @@
+/**
+* @function countFromOneToTen
+* Iterates over the numberList array and prints each number to the console.
+*/
