@@ -2,7 +2,11 @@
 
 ## Setup
 ### Pip Install
-`pip install -r requirements.txt`
+1. clone repo
+2. `npm i`
+3. `npm run py_install`
+3. `npm run setup`
+3. `npm run main`
 
 ### Initalize DB
 Run `python .\setup\initSRD.py`, first time you run this it will auto-download a smaller AI model to your cache, only needs to be ran once

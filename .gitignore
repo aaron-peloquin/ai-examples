@@ -1,5 +1,5 @@
 # App-specific
-.chromaDB/*
+apps/original/.chromaDB/*
 
 node_modules
 

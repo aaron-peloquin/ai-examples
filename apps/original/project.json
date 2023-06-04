@@ -11,6 +11,13 @@
         "cwd": "./apps/original"
       }
     },
+    "setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python setup/initSRD.py",
+        "cwd": "./apps/original"
+      }
+    },
     "docs": {
       "executor": "nx:run-commands",
       "options": {
