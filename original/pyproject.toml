@@ -1,0 +1,30 @@
+[tool.coverage.run]
+branch = true
+source = [ "original" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-fail-under=100 --cov-report html:'../coverage/./original/html' --cov-report xml:'../coverage/./original/coverage.xml' --junitxml='../reports/./original/unittests/junit.xml' --html='../reports/./original/unittests/html/index.html'"
+
+[tool.poetry]
+name = "original"
+version = "1.0.0"
+description = "&#39;original"
+authors = [ ]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "original"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.11"
+
+  
+
+[build-system]
+requires = ["poetry-core==1.1.0"]
+build-backend = "poetry.core.masonry.api"
