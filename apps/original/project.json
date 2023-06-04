@@ -4,18 +4,25 @@
   "projectType": "application",
   "sourceRoot": "./original/original",
   "targets": {
+    "main": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python main.py",
+        "cwd": "./apps/original"
+      }
+    },
     "docs": {
       "executor": "nx:run-commands",
       "options": {
         "command": "pydoc-markdown -p original --render-toc > docs/source/api.md",
-        "cwd": "./original"
+        "cwd": "./apps/original"
       }
     },
     "lock": {
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry lock --no-update",
-        "cwd": "./original"
+        "cwd": "./apps/original"
       }
     },
     "add": {
@@ -69,7 +76,7 @@
       ],
       "options": {
         "command": "poetry run pytest tests/",
-        "cwd": "./original"
+        "cwd": "./apps/original"
       }
     },
     "tox": {
