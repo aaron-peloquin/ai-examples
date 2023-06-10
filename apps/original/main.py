@@ -1,3 +1,4 @@
+import library_loader
 import time
 from colorama import Fore, Style
 
@@ -5,9 +6,9 @@ from langchain.agents import initialize_agent, AgentType
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 
-from modules.chain_concatenate import ConcatenateChain
-from modules.callback_custom import CustomCallbackHandler
-from modules.llm_makersuite import MakerSuite
+from modulez.chain_concatenate import ConcatenateChain
+from modulez.callback_custom import CustomCallbackHandler
+from llms.makersuite import MakerSuite
 from tools.EquationSolver import EquationSolver
 
 llm = MakerSuite()
