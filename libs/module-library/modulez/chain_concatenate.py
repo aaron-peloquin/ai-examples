@@ -1,7 +1,6 @@
 from langchain.chains.base import Chain
 
 from typing import Dict, List
-
 class ConcatenateChain(Chain):
     agent: Chain
     conversation: Chain

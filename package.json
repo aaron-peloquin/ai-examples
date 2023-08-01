@@ -1,0 +1,25 @@
+{
+  "name": "ai-examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "@nxlv/python": "^15.9.1"
+  },
+  "scripts": {
+    "main": "npx nx run original:main",
+    "py_install": "npx nx run original:install",
+    "setup": "npx nx run original:setup",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aaron-peloquin/ai-examples.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aaron-peloquin/ai-examples/issues"
+  },
+  "homepage": "https://github.com/aaron-peloquin/ai-examples#readme"
+}
