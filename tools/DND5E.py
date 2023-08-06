@@ -41,6 +41,7 @@ class DND5E(BaseTool):
         common_mistakes = {
             "weapons": "equipment",
             "armor": "equipment",
+            "class": "classes",
             "items": "equipment",
         }
         resource = common_mistakes.get(resource, resource).replace(" ", "-")

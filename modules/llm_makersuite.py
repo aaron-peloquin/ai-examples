@@ -39,21 +39,3 @@ class MakerSuite(LLM):
         return {
             "max_output_tokens": self.max_output_tokens,
         }
-
-    def truncate_string(self, full_reply, stop_list):
-        """
-        Truncates a string as soon as it finds any of the items in the `stop_list`.
-
-        Args:
-            string: The string to truncate.
-            stop_list: A list of strings that should be used to truncate the string.
-
-        Returns:
-            The truncated string.
-        """
-
-        pattern = re.compile("|".join(stop_list))
-        match = pattern.search(full_reply)
-        if match:
-            return full_reply[:match.start()]
-        return full_reply

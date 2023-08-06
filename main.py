@@ -9,7 +9,7 @@ from modules.chain_concatenate import ConcatenateChain
 # from modules.callback_custom import CustomCallbackHandler
 from modules.llm_makersuite import MakerSuite
 from tools.EquationSolver import EquationSolver
-
+from tools.Wikipedia import Wikipedia
 llm = MakerSuite()
 
 from tools.DiceRoller import DiceRoller
@@ -46,6 +46,7 @@ agent = initialize_agent(
         DiceRoller(),
         EquationSolver(),
         dndSRD(),
+        Wikipedia()
     ],
     llm = llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
@@ -58,11 +59,17 @@ print(Fore.RED, '====', Style.RESET_ALL, ' STARTING ', Fore.RED, '====')
 
 while True:
     print(Fore.CYAN)
-    human_input = input("Human:")
+    human_input = input("Human: ")
     start_time = time.time()
     print(Style.RESET_ALL)
 
-    ai_chat_agent_reply = full_chain.run(human_input)
+    try:
+        ai_chat_agent_reply = full_chain.run(human_input)
+    except ValueError as e:
+        ai_chat_agent_reply = str(e)
+        if not ai_chat_agent_reply.startswith("Could not parse LLM output: `"):
+            raise e
+        ai_chat_agent_reply = ai_chat_agent_reply.removeprefix("Could not parse LLM output: `").removesuffix("`")
 
     print(Fore.LIGHTMAGENTA_EX, ai_chat_agent_reply, Style.RESET_ALL)
 
