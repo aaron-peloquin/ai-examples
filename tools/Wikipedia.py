@@ -9,7 +9,8 @@ class Wikipedia(BaseTool):
     name = "Wikipedia"
     description = (
         "Used to retrieve general information about anything from the real world. "
-        "The search query should be simplified term like a single item or subject. If needed, add a coma after the term and add any extra details after the coma. "
+        "The search query should be simplified term like a single item or subject. "
+        "If needed, add a coma after the term and add any extra details after the coma. "
         "This tool will return hard facts that you can trust, do not embellish or expand on information returned from this tool. "
     )
 
@@ -18,7 +19,7 @@ class Wikipedia(BaseTool):
         query: str,
         run_manager: Optional[CallbackManagerForToolRun] = None,
     ) -> str:
-        """Use the DND5E tool."""
+        """Use the Wikipedia tool."""
         print("")
         print(f"==== Wikipedia qry: `{query}`")
         query = str.lower(query)
@@ -35,4 +36,14 @@ class Wikipedia(BaseTool):
             results += f"""{page_results.title}
             {page_results.content}"""
 
-        return results
+        return self.shorten_output(results)
+
+    def shorten_output(self, text: str):
+        """Finds the third instance of a double new line in a given string and returns the text above that."""
+        count = 0
+        for i in range(len(text)):
+            if text[i] == '\n' and text[i + 1] == '\n':
+                count += 1
+                if count == 3:
+                    return text[:i]
+        return text

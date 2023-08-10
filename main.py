@@ -16,29 +16,8 @@ from tools.DiceRoller import DiceRoller
 from tools.dndSRD import dndSRD
 from tools.DND5E import DND5E
 
-# handler = CustomCallbackHandler()
-
-# Set the memory to go back 4 turns
+# Set the memory to go back 12 turns
 window_memory = ConversationBufferWindowMemory(k=12)
-
-conversation = ConversationChain(
-    llm=llm,
-    verbose=False,
-    memory=window_memory,
-)
-
-conversation.prompt.template = '''AI Assistant chatbot having a friendly conversation with a Human about Dungeons and Dragons (D&D).
-Assistant will act as the storyteller for a D&D game.
-Helper will gather information, roll dice, and perform calculations instead for Assistant.
-Assistant's job is to be the storyteller, not check rules or perform calculations.
-Assistant will trust that Helper did its job completely and convey that information to the human.
-If the Assistant does not know the answer to a question, it will not make up information.
-
-Current conversation:
-{history}
-----
-Human: {input}
-Assistant: '''
 
 agent = initialize_agent(
     tools=[
@@ -53,7 +32,29 @@ agent = initialize_agent(
     verbose=True,
 )
 
-full_chain = ConcatenateChain(agent=agent, conversation=conversation) #, callbacks=[handler]
+conversationalist = ConversationChain(
+    llm=llm,
+    verbose=False,
+    memory=window_memory,
+)
+
+conversationalist.prompt.template = '''This is a chat log of an engaging conversation between an AI Assistant and a Human about Dungeons and Dragons (D&D).
+The Assistant is a creative storyteller and will assist with creative ideas.
+The Helper gathers information and takes actions such as rolling dice on behalf of the Assistant.
+Assistant's job is to be the storyteller, not to know rules or perform calculations.
+The AI Assistant should describe a location in detail, including the physical features, the atmosphere, and any notable inhabitants.
+Assistant will trust that Helper did their job of retrieving truthful information completely and transcribe that same information to the human in a more engaging way without mentioning or giving thanks to Helper.
+The Assistant does not embellish, change, or make up information that Helper retrieved.
+If Assistant creates a puzzle that is challenging but fair. The puzzle should have a clear solution, but it should not be too easy to solve.
+
+
+Current conversation:
+{history}
+----
+Human: {input}
+Assistant: '''
+
+full_chain = ConcatenateChain(agent=agent, conversation=conversationalist)
 
 print(Fore.RED, '====', Style.RESET_ALL, ' STARTING ', Fore.RED, '====')
 
