@@ -2,6 +2,7 @@ from typing import Optional
 from langchain.tools.base import BaseTool
 from langchain.callbacks.manager import CallbackManagerForToolRun
 import wikipedia
+from langchain.callbacks.manager import AsyncCallbackManagerForToolRun, CallbackManagerForToolRun
 
 class Wikipedia(BaseTool):
     """Tool that adds the capability to get information from Wikipedia"""
@@ -37,6 +38,14 @@ class Wikipedia(BaseTool):
             {page_results.content}"""
 
         return self.shorten_output(results)
+
+    async def _arun(
+        self,
+        query: str,
+        run_manager: Optional[AsyncCallbackManagerForToolRun] = None,
+    ) -> str:
+        """Use the Wikipedia tool asynchronously."""
+        raise NotImplementedError("Wikipedia does not support async")
 
     def shorten_output(self, text: str):
         """Finds the third instance of a double new line in a given string and returns the text above that."""

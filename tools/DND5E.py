@@ -55,7 +55,7 @@ class DND5E(BaseTool):
                 if resource_name:
                     new_query += f"/{resource_name}"
                 return self._run(new_query)
-            return f"Invalid Agent Input syntax ({query}), try again with Agent Input syntax formatted like `spell/acid arrow` but using your terms"
+            return f"Invalid Agent Input syntax ({query}), try again with Agent Input syntax formatted like `spell/acid arrow` but using your terms. Please verify your requested a resource is from the available list."
 
         url = f"https://www.dnd5eapi.co/api/{resource}"
         if resource_name:
